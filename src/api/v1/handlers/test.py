@@ -12,8 +12,6 @@ def contract_service() -> BaseContractService:
     return container.resolve(BaseContractService)
 
 @test_router.get("/test")
-async def test(container: BaseContractService = Depends(contract_service)) -> dict:
-    # config = container.resolve(Config)
-    # print(config)
-    print(type(container))
+async def test(service: BaseContractService = Depends(contract_service)) -> dict:
+    await service.create_temp()
     return {"test": "test3"}

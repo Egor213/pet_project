@@ -5,5 +5,5 @@ from abc import ABC, abstractmethod
 @dataclass
 class BaseContractRepository(ABC):
     @abstractmethod
-    async def temp():
+    async def create_temp():
         ...
