@@ -1,20 +1,18 @@
 from fastapi import Depends, routing
-import punq
 
-from src.app.config.main import Config
 from src.api import container
-from src.services.site_service import BaseSiteService, MongoSiteService
+from src.services.contract_service import BaseContractService
 
 
 test_router = routing.APIRouter(
     tags=["test"],
 )
 
-def contract_service() -> BaseSiteService:
-    return container.resolve(BaseSiteService)
+def contract_service() -> BaseContractService:
+    return container.resolve(BaseContractService)
 
 @test_router.get("/test")
-async def test(container: punq.Container = Depends(contract_service)) -> dict:
+async def test(container: BaseContractService = Depends(contract_service)) -> dict:
     # config = container.resolve(Config)
     # print(config)
     print(type(container))

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 
 @dataclass
-class BaseSiteRepository(ABC):
+class BaseContractService(ABC):
     @abstractmethod
     async def temp():
         ...
