@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from src.api.v1 import v1_router
 
 

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from .base import BaseContract
 
 
@@ -8,7 +9,6 @@ class ParceSiteContract(BaseContract):
     result: dict | None = None
     error: dict | None = None
 
-
     @classmethod
-    def create_contract(cls, url_site: str) -> 'ParceSiteContract':
+    def create_contract(cls, url_site: str) -> "ParceSiteContract":
         return cls(url_site=url_site)

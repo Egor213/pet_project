@@ -1,8 +1,11 @@
 import punq
 from motor.motor_asyncio import AsyncIOMotorClient
+
 from src.app.config import Config
-from src.services.parce_contract_service import BaseParceSiteService, MongoParceSiteService
-from src.repositories.parce_contract_repository import BaseParceSiteRepository, MongoParceSiteRepository
+from src.repositories.parce_contract_repository import (
+    BaseParceSiteRepository, MongoParceSiteRepository)
+from src.services.parce_contract_service import (BaseParceSiteService,
+                                                 MongoParceSiteService)
 
 
 def init_perce_site_repository_mongo():

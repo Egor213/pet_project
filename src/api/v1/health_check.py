@@ -1,6 +1,5 @@
 from fastapi import routing
 
-
 health_check_router = routing.APIRouter(
     prefix="/health_check",
     tags=["health_check"],

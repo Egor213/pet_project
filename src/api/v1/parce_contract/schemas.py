@@ -1,15 +1,13 @@
 from pydantic import BaseModel
-from datetime import datetime
 
-from src.entity import StatusEnum, ParceSiteContract
+from src.entity import ParceSiteContract, StatusEnum
 
 
 class CreateContractSchema(BaseModel):
     id: str
     url_site: str
     status: StatusEnum
-    
-    
+
     @classmethod
     def from_entity(cls, entity: ParceSiteContract) -> "CreateContractSchema":
         return cls(
@@ -17,4 +15,3 @@ class CreateContractSchema(BaseModel):
             url_site=entity.url_site,
             status=entity.status.value,
         )
-    

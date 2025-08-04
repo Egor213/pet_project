@@ -4,10 +4,10 @@ from pydantic import BaseModel
 
 
 class Mode(str, Enum):
-    debug = 'debug'
-    production = 'production'
-    
-    
+    debug = "debug"
+    production = "production"
+
+
 class DBConfig(BaseModel):
     uri: str
     db_name: str

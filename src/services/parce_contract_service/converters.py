@@ -9,5 +9,5 @@ def convert_parce_site_contract_to_document(contract: ParceSiteContract) -> dict
         "status": contract.status.value,
         "error": contract.error,
         "created_at": contract.created_at,
-        "updated_at": contract.updated_at
+        "updated_at": contract.updated_at,
     }
