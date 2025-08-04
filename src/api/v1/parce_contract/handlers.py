@@ -1,5 +1,7 @@
 from fastapi import Depends, routing
 
+from .schemas import CreateContractSchema
+
 from src.api import container
 from src.services.parce_contract_service import BaseParceSiteService
 
@@ -11,9 +13,10 @@ test_router = routing.APIRouter(
 def contract_service() -> BaseParceSiteService:
     return container.resolve(BaseParceSiteService)
 
-@test_router.get("/test")
-async def test(service: BaseParceSiteService = Depends(contract_service)) -> dict:
-    res = await service.get_all_contracts()
-    print(res)
-    print(type(res[0]))
-    return {"test": "test"}
+@test_router.get("/create_site_contract/{url_site}")
+async def create_site_contract_handler(
+    url_site: str,
+    service: BaseParceSiteService = Depends(contract_service)
+) -> CreateContractSchema:
+    contract = await service.create_contract(url_site=url_site)
+    return CreateContractSchema.from_entity(contract)
