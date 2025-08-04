@@ -13,5 +13,7 @@ def contract_service() -> BaseParceSiteService:
 
 @test_router.get("/test")
 async def test(service: BaseParceSiteService = Depends(contract_service)) -> dict:
-    await service.create_temp()
-    return {"test": "test3"}
+    res = await service.get_all_contracts()
+    print(res)
+    print(type(res[0]))
+    return {"test": "test"}

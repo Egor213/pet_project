@@ -10,3 +10,5 @@ class Mode(str, Enum):
     
 class DBConfig(BaseModel):
     uri: str
+    db_name: str
+    collection_name: str

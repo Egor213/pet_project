@@ -5,5 +5,5 @@ from abc import ABC, abstractmethod
 @dataclass
 class BaseParceSiteService(ABC):
     @abstractmethod
-    async def temp():
+    async def get_all_contracts():
         ...

@@ -5,18 +5,18 @@ from src.services.parce_contract_service import BaseParceSiteService, MongoParce
 from src.repositories.parce_contract_repository import BaseParceSiteRepository, MongoParceSiteRepository
 
 
-def init_contract_repository_mongo():
+def init_perce_site_repository_mongo():
     config: Config = Config()
     client = AsyncIOMotorClient(config.db.uri, serverSelectionTimeoutMS=3000)
     return MongoParceSiteRepository(
         mongo_db_client=client,
-        mongo_db_db_name="contracts",
-        mongo_db_collection_name="contracts",
+        mongo_db_db_name=config.db.db_name,
+        mongo_db_collection_name=config.db.collection_name,
     )
 
 
-def init_contract_service_mongo():
-    contract_repo = init_contract_repository_mongo()
+def init_parce_site_service_mongo():
+    contract_repo = init_perce_site_repository_mongo()
     return MongoParceSiteService(contract_repository=contract_repo)
 
 
@@ -27,13 +27,13 @@ def init_container():
 
     container.register(
         BaseParceSiteRepository,
-        factory=init_contract_repository_mongo,
+        factory=init_perce_site_repository_mongo,
         scope=punq.Scope.singleton,
     )
 
     container.register(
         BaseParceSiteService,
-        factory=init_contract_service_mongo,
+        factory=init_parce_site_service_mongo,
         scope=punq.Scope.singleton,
     )
 

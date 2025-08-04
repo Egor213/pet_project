@@ -2,4 +2,5 @@
 mode: debug
 db:
   uri: mongodb://localhost:27017
-
+  db_name: contracts
+  collection_name: parce_site_contracts
