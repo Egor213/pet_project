@@ -3,7 +3,7 @@ from .base import BaseContract
 
 
 @dataclass
-class SiteContract(BaseContract):
+class ParceSiteContract(BaseContract):
     url_site: str
     result: dict | None
     error: dict | None

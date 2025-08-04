@@ -3,11 +3,11 @@ from dataclasses import dataclass
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.repositories.main import BaseMongoDBRepository
-from .base import BaseContractRepository
+from .base import BaseParceSiteRepository
 
 
 @dataclass
-class MongoContractRepository(BaseContractRepository, BaseMongoDBRepository):
+class MongoParceSiteRepository(BaseParceSiteRepository, BaseMongoDBRepository):
     mongo_db_client: AsyncIOMotorClient
     mongo_db_db_name: str
     mongo_db_collection_name: str
