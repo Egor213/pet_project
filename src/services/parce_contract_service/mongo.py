@@ -2,10 +2,11 @@ from dataclasses import dataclass
 
 from src.entity import ParceSiteContract
 from src.repositories.parce_contract_repository import MongoParceSiteRepository
-from src.services.validators import validate_uuid, validate_found_entity
+from src.services.validators import validate_found_entity, validate_uuid
 
 from .base import BaseParceSiteService
-from .converters import convert_parce_site_contract_to_document, convert_document_to_parce_site_contract
+from .converters import (convert_document_to_parce_site_contract,
+                         convert_parce_site_contract_to_document)
 
 
 @dataclass

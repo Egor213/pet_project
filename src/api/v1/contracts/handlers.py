@@ -1,12 +1,12 @@
-from fastapi import Depends, routing, status, Path
+from fastapi import Depends, Path, routing, status
 from pydantic import HttpUrl
 
 from src.api import container
+from src.api.schemas import ErrorSchema
 from src.services.parce_contract_service import BaseParceSiteService
 from src.utils.decorators import exception_handler
-from src.api.schemas import ErrorSchema
 
-from .schemas import CreateContractSchema, ContractSchema
+from .schemas import ContractSchema, CreateContractSchema
 
 contract_router = routing.APIRouter(
     tags=["contracts"],
@@ -68,3 +68,12 @@ async def get_all_site_contracts_handler(
 ) -> list[ContractSchema]:
     contracts = await service.get_all_contracts()
     return [ContractSchema.from_entity(contract) for contract in contracts]
+
+
+@contract_router.delete("/test")
+async def test(test: str):
+    from src.parcers.main import parce_site_queue
+
+    await parce_site_queue.put(test)
+    print(parce_site_queue)
+    return {"test": test}

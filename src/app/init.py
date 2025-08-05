@@ -1,9 +1,14 @@
+import asyncio
+
 import punq
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.app.config import Config
-from src.repositories.parce_contract_repository import BaseParceSiteRepository, MongoParceSiteRepository
-from src.services.parce_contract_service import BaseParceSiteService, MongoParceSiteService
+from src.parcers.main import init_parce_site_workers
+from src.repositories.parce_contract_repository import (
+    BaseParceSiteRepository, MongoParceSiteRepository)
+from src.services.parce_contract_service import (BaseParceSiteService,
+                                                 MongoParceSiteService)
 
 
 def init_parce_site_repository_mongo():
@@ -37,5 +42,5 @@ def init_container():
         factory=init_parce_site_service_mongo,
         scope=punq.Scope.singleton,
     )
-
+    asyncio.create_task(init_parce_site_workers())
     return container
