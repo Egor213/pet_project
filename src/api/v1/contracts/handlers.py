@@ -1,4 +1,5 @@
-from fastapi import Depends, routing, status
+from fastapi import Depends, routing, status, Path
+from pydantic import HttpUrl
 
 from src.api import container
 from src.services.parce_contract_service import BaseParceSiteService
@@ -27,7 +28,7 @@ def contract_service() -> BaseParceSiteService:
 )
 @exception_handler
 async def create_site_contract_handler(
-    url_site: str,
+    url_site: HttpUrl = Path(example="https://example.com"),
     service: BaseParceSiteService = Depends(contract_service),
 ) -> CreateContractSchema:
     contract = await service.create_contract(url_site=url_site)
@@ -40,6 +41,7 @@ async def create_site_contract_handler(
     responses={
         status.HTTP_200_OK: {"model": ContractSchema},
         status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+        status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
     },
 )
 @exception_handler
@@ -57,6 +59,7 @@ async def get_site_contract_handler(
     responses={
         status.HTTP_200_OK: {"model": ContractSchema},
         status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+        status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
     },
 )
 @exception_handler
