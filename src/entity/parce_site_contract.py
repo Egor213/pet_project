@@ -7,7 +7,7 @@ from .base import BaseContract
 class ParceSiteContract(BaseContract):
     url_site: str
     result: dict | None = None
-    error: dict | None = None
+    error: str | None = None
 
     @classmethod
     def create_contract(cls, url_site: str) -> "ParceSiteContract":

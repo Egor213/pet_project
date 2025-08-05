@@ -5,7 +5,7 @@ from enum import Enum
 from uuid import uuid4
 
 
-class StatusEnum(Enum):
+class StatusEnum(str, Enum):
     IN_PROGRESS = "in_progress"
     SUCCESS = "success"
     FAILED = "failed"
