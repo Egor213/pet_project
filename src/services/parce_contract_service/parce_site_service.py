@@ -1,17 +1,16 @@
 from dataclasses import dataclass
 
 from src.entity import ParceSiteContract
-from src.repositories.parce_contract_repository import MongoParceSiteRepository
+from src.repositories.parce_contract_repository import BaseParceSiteRepository
 from src.services.validators import validate_found_entity, validate_uuid
 
-from .base import BaseParceSiteService
 from .converters import (convert_document_to_parce_site_contract,
                          convert_parce_site_contract_to_document)
 
 
 @dataclass
-class MongoParceSiteService(BaseParceSiteService):
-    contract_repository: MongoParceSiteRepository
+class ParceSiteService:
+    contract_repository: BaseParceSiteRepository
 
     async def get_all_contracts(self):
         contracts_list = await self.contract_repository.get_all_contracts()

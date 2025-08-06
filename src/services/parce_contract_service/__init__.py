@@ -1,2 +1,1 @@
-from .base import *
-from .mongo import *
+from .parce_site_service import *

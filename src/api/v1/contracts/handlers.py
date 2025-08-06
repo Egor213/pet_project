@@ -1,9 +1,10 @@
-from fastapi import Depends, Path, routing, status
+import punq
+from fastapi import Depends, Query, routing, status
 from pydantic import HttpUrl
 
-from src.api import container
 from src.api.schemas import ErrorSchema
-from src.services.parce_contract_service import BaseParceSiteService
+from src.app.init import init_container
+from src.services.parce_contract_service import ParceSiteService
 from src.utils.decorators import exception_handler
 
 from .schemas import ContractSchema, CreateContractSchema
@@ -14,24 +15,22 @@ contract_router = routing.APIRouter(
 )
 
 
-def contract_service() -> BaseParceSiteService:
-    return container.resolve(BaseParceSiteService)
-
-
 @contract_router.post(
-    "/parce_site/{url_site}",
+    "/parce_site",
     status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_201_CREATED: {"model": CreateContractSchema},
         status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+        status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
     },
 )
 @exception_handler
 async def create_site_contract_handler(
-    url_site: HttpUrl = Path(example="https://example.com"),
-    service: BaseParceSiteService = Depends(contract_service),
+    url_site: HttpUrl = Query(..., example="https://example.com"),
+    container: punq.Container = Depends(init_container),
 ) -> CreateContractSchema:
-    contract = await service.create_contract(url_site=url_site)
+    service = container.resolve(ParceSiteService)
+    contract = await service.create_contract(url_site=str(url_site))
     return CreateContractSchema.from_entity(contract)
 
 
@@ -47,8 +46,9 @@ async def create_site_contract_handler(
 @exception_handler
 async def get_site_contract_handler(
     contract_id: str,
-    service: BaseParceSiteService = Depends(contract_service),
+    container: punq.Container = Depends(init_container),
 ) -> ContractSchema:
+    service = container.resolve(ParceSiteService)
     contract = await service.get_contract_by_id(contract_id=contract_id)
     return ContractSchema.from_entity(contract)
 
@@ -64,8 +64,9 @@ async def get_site_contract_handler(
 )
 @exception_handler
 async def get_all_site_contracts_handler(
-    service: BaseParceSiteService = Depends(contract_service),
+    container: punq.Container = Depends(init_container),
 ) -> list[ContractSchema]:
+    service = container.resolve(ParceSiteService)
     contracts = await service.get_all_contracts()
     return [ContractSchema.from_entity(contract) for contract in contracts]
 
