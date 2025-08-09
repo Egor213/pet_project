@@ -1,7 +1,10 @@
 import asyncio
+import logging
 
 parce_site_queue = asyncio.Queue()
 parce_site_results_queue = asyncio.Queue()
+
+logger = logging.getLogger(__name__)
 
 
 async def parce_site(url):
@@ -23,13 +26,6 @@ async def parce_site_worker():
 
 
 async def init_parce_site_workers(count_workers=10):
+    logger.info("Starting parce site workers")
     workers = [asyncio.create_task(parce_site_worker()) for _ in range(count_workers)]
-    urls = ["https://example.com", "https://yandex.ru", "https://google.com"]
-    for url in urls:
-        await parce_site_queue.put(url)
-    await parce_site_queue.join()
     await asyncio.gather(*workers, return_exceptions=True)
-
-
-# if __name__ == "__main__":
-#     asyncio.run(init_parce_site_workers())

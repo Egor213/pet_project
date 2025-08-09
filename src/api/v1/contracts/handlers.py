@@ -12,6 +12,10 @@ from .schemas import ContractSchema, CreateContractSchema
 contract_router = routing.APIRouter(
     tags=["contracts"],
     prefix="/contracts",
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+        status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
+    },
 )
 
 
@@ -20,8 +24,6 @@ contract_router = routing.APIRouter(
     status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_201_CREATED: {"model": CreateContractSchema},
-        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
-        status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
     },
 )
 @exception_handler
@@ -39,8 +41,6 @@ async def create_site_contract_handler(
     status_code=status.HTTP_200_OK,
     responses={
         status.HTTP_200_OK: {"model": ContractSchema},
-        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
-        status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
     },
 )
 @exception_handler
@@ -58,8 +58,6 @@ async def get_site_contract_handler(
     status_code=status.HTTP_200_OK,
     responses={
         status.HTTP_200_OK: {"model": ContractSchema},
-        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
-        status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
     },
 )
 @exception_handler

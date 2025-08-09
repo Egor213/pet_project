@@ -12,8 +12,14 @@ def exception_handler(function):
         try:
             return await function(*args, **kwargs)
         except NotFoundContract as exception:
-            return responses.JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"error": exception.message})
+            return responses.JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content={"error": exception.message},
+            )
         except ApplicationException as exception:
-            return responses.JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"error": exception.message})
+            return responses.JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"error": exception.message},
+            )
 
     return wrapper
