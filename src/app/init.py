@@ -1,13 +1,14 @@
-import asyncio
+import logging
 from functools import lru_cache
 
 import punq
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.app.config import Config
+from src.processing_site.workers import parce_site_worker
 from src.repositories.parce_contract_repository import (
     BaseParceSiteRepository, MongoParceSiteRepository)
-from src.services.parce_contract_service import ParceSiteService
+from src.services import AsyncPoolService, ParceSiteService
 
 
 def init_parce_site_repository_mongo():
@@ -41,4 +42,16 @@ def init_container():
         factory=init_parce_site_service_mongo,
         scope=punq.Scope.singleton,
     )
+
+    # AsyncPool
+    container.register(
+        AsyncPoolService,
+        scope=punq.Scope.singleton,
+        instance=AsyncPoolService(
+            handler=parce_site_worker,
+            num_workers=10,
+            logger=logging.getLogger(__name__),
+        ),
+    )
+
     return container

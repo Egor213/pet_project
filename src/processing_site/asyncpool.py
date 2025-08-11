@@ -1,7 +1,7 @@
 import asyncio
-from dataclasses import dataclass, field
 import logging
 import typing as tp
+from dataclasses import dataclass, field
 
 
 class Terminator:

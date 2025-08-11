@@ -11,6 +11,6 @@ def validate_uuid(uuid_str, version=4):
         raise ValidationError(f"Некорректный UUID: {uuid_str}")
 
 
-def validate_found_entity(contract):
-    if not contract:
+def validate_found_entity(entity):
+    if not entity:
         raise NotFoundContract

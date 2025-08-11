@@ -69,10 +69,12 @@ async def get_all_site_contracts_handler(
     return [ContractSchema.from_entity(contract) for contract in contracts]
 
 
-@contract_router.delete("/test")
-async def test(test: str):
-    from src.parcers.main import parce_site_queue
+@contract_router.post("/test")
+async def test(test: str, container: punq.Container = Depends(init_container)):
+    from src.processing_site.dto_workers import ParceSiteDto
+    from src.services import AsyncPoolService
 
-    await parce_site_queue.put(test)
-    print(parce_site_queue)
+    async_pool_service = container.resolve(AsyncPoolService)
+    for i in range(100):
+        await async_pool_service.add_task(ParceSiteDto(url_site=test + str(i)))
     return {"test": test}

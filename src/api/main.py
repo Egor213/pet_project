@@ -4,15 +4,19 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from src.api.v1 import v1_router
+from src.app.init import init_container
 from src.app.logger import init_logger
-from src.parcers.main import init_parce_site_workers
+from src.services import AsyncPoolService
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    asyncio.create_task(init_parce_site_workers())
+    container = init_container()
+    async_pool_service = container.resolve(AsyncPoolService)
+    await async_pool_service.run()
     init_logger()
     yield
+    await async_pool_service.stop()
 
 
 def create_app() -> FastAPI:
