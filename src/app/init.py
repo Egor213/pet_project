@@ -5,11 +5,14 @@ import punq
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.app.config import Config
+from src.processing_site.result_handlers import update_parce_site_contract
 from src.processing_site.workers import parce_site_worker
 from src.repositories.parce_contract_repository import (
-    BaseParceSiteRepository, MongoParceSiteRepository)
-from src.services import AsyncPoolService, ParceSiteService, BasePoolService
-from src.processing_site.result_handlers import update_parce_site_contract
+    BaseParceSiteRepository,
+    MongoParceSiteRepository,
+)
+from src.services import AsyncPoolService, BasePoolService, ParceSiteService
+from src.services.http_service import AioHttpService, BaseHttpService
 
 
 def init_parce_site_repository_mongo():
@@ -22,16 +25,18 @@ def init_parce_site_repository_mongo():
     )
 
 
-def init_async_pool_service() -> AsyncPoolService:
+def init_async_pool_service(container) -> AsyncPoolService:
+    http_service = container.resolve(BaseHttpService)
     async_pool = AsyncPoolService(
         handler=parce_site_worker,
         num_workers=10,
+        max_wait_time=1200,
         logger=logging.getLogger(__name__),
+        http_service=http_service,
     )
     async_pool.add_result_handler(update_parce_site_contract)
-    # Можно метрики собирать!
+    # TODO: Можно метрики собирать!
     return async_pool
-    
 
 
 def init_parce_site_service_mongo(container):
@@ -53,8 +58,16 @@ def init_container():
     )
     # AsyncPool
     container.register(
+        BaseHttpService,
+        instance=AioHttpService(
+            max_connections=10,
+            timeout=1200,
+        ),
+        scope=punq.Scope.singleton,
+    )
+    container.register(
         BasePoolService,
-        factory=init_async_pool_service,
+        factory=lambda: init_async_pool_service(container),
         scope=punq.Scope.singleton,
     )
     container.register(

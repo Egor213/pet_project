@@ -12,4 +12,6 @@ class BaseMongoDBRepository(ABC):
 
     @property
     def _collection(self):
-        return self.mongo_db_client[self.mongo_db_db_name][self.mongo_db_collection_name]
+        return self.mongo_db_client[self.mongo_db_db_name][
+            self.mongo_db_collection_name
+        ]

@@ -14,9 +14,10 @@ class AsyncPool:
     handler: tp.Callable
     logger: logging.Logger = field(default_factory=logging.getLogger)
     workers: list[asyncio.Task] = field(default_factory=list, init=False)
-    max_wait_time: int = field(default=10)
+    max_wait_time: int = field(default=120)
     input_queue: asyncio.Queue = field(default_factory=asyncio.Queue, init=False)
     output_queue: asyncio.Queue = field(default_factory=asyncio.Queue, init=False)
+    handler_kwargs: dict = field(default_factory=dict)
 
     def __post_init__(self):
         self.input_queue = asyncio.Queue()
@@ -28,7 +29,10 @@ class AsyncPool:
                 task_dto = await self.input_queue.get()
                 if isinstance(task_dto, Terminator):
                     break
-                result = await asyncio.wait_for(self.handler(task_dto), timeout=self.max_wait_time)
+                result = await asyncio.wait_for(
+                    self.handler(task_dto, **self.handler_kwargs),
+                    timeout=self.max_wait_time,
+                )
                 await self.output_queue.put(result)
             except (KeyboardInterrupt, SystemExit) as e:
                 self.logger.info(f"Worker received exit signal: {e}")
@@ -40,8 +44,9 @@ class AsyncPool:
                 self.input_queue.task_done()
 
     async def run(self):
-        self.workers = [asyncio.create_task(self.worker_loop()) for _ in range(self.num_workers)]
-
+        self.workers = [
+            asyncio.create_task(self.worker_loop()) for _ in range(self.num_workers)
+        ]
 
     async def add_task(self, task_dto):
         await self.input_queue.put(task_dto)

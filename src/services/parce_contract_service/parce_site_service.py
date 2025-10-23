@@ -1,13 +1,15 @@
 from dataclasses import dataclass
 
 from src.entity import ParceSiteContract
-from src.repositories.parce_contract_repository import BaseParceSiteRepository
-from src.services.validators import validate_found_entity, validate_uuid
 from src.processing_site.dto_workers import ParceSiteDto
+from src.repositories.parce_contract_repository import BaseParceSiteRepository
 from src.services import AsyncPoolService, BasePoolService
+from src.services.validators import validate_found_entity, validate_uuid
 
-from .converters import (convert_document_to_parce_site_contract,
-                         convert_parce_site_contract_to_document)
+from .converters import (
+    convert_document_to_parce_site_contract,
+    convert_parce_site_contract_to_document,
+)
 
 
 @dataclass
@@ -32,5 +34,7 @@ class ParceSiteService:
         await self.contract_repository.create_contract(
             convert_parce_site_contract_to_document(contract),
         )
-        await self.pool_service.add_task(ParceSiteDto(url_site=url_site, id=contract.id))
+        await self.pool_service.add_task(
+            ParceSiteDto(url_site=url_site, id=contract.id)
+        )
         return contract

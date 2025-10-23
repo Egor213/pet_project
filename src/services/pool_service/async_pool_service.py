@@ -1,19 +1,25 @@
-from src.processing_site.asyncpool import AsyncPool
-from .base_pool_service import BasePoolService
-import typing as tp
 import asyncio
+import typing as tp
 
+from src.processing_site.asyncpool import AsyncPool
+
+from .base_pool_service import BasePoolService
 
 # Мне не нравится, что я судя привязываю фоновый обработчик, но это пет-проект, так что ладно)
 # Наверное, я бы хотел видеть что-то типо мапы основной обработчик + обработчик результата
 
+
 class AsyncPoolService(BasePoolService):
-    def __init__(self, handler, num_workers=10, logger=None):
+    def __init__(
+        self, handler, num_workers=10, max_wait_time=10, logger=None, **handler_kwargs
+    ):
         super().__init__()
         self.pool = AsyncPool(
             num_workers=num_workers,
             handler=handler,
             logger=logger,
+            max_wait_time=max_wait_time,
+            handler_kwargs=handler_kwargs,
         )
         self.running = False
         self._result_dispatcher_task = None
@@ -26,7 +32,6 @@ class AsyncPoolService(BasePoolService):
                 *(handler(result) for handler in self.result_handlers),
                 return_exceptions=True,
             )
-
 
     def add_result_handler(self, result_handler):
         return self.result_handlers.append(result_handler)
@@ -44,7 +49,6 @@ class AsyncPoolService(BasePoolService):
         self.running = False
         if self._result_dispatcher_task:
             self._result_dispatcher_task.cancel()
-
 
     async def get_result(self):
         return await self.pool.get_result()

@@ -1,7 +1,6 @@
+import typing as tp
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-
-import typing as tp
 
 
 @dataclass

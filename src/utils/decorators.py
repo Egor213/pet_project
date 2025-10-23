@@ -2,8 +2,11 @@ from functools import wraps
 
 from fastapi import responses, status
 
-from src.exceptions.contract import (ApplicationException, LogicException,
-                                     NotFoundContract)
+from src.exceptions.contract import (
+    ApplicationException,
+    LogicException,
+    NotFoundContract,
+)
 
 
 def exception_handler(function):
