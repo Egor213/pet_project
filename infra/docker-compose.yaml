@@ -7,7 +7,7 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - dbdata6:/data/db
+      - dbdata:/data/db
     networks:
       - backend
 
@@ -28,7 +28,7 @@ services:
       - backend
 
 volumes:
-  dbdata6:
+  dbdata:
 
 networks:
   backend:

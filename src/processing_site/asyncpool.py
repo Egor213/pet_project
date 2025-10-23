@@ -42,6 +42,7 @@ class AsyncPool:
     async def run(self):
         self.workers = [asyncio.create_task(self.worker_loop()) for _ in range(self.num_workers)]
 
+
     async def add_task(self, task_dto):
         await self.input_queue.put(task_dto)
 

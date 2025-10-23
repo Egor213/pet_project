@@ -6,17 +6,17 @@ from fastapi import FastAPI
 from src.api.v1 import v1_router
 from src.app.init import init_container
 from src.app.logger import init_logger
-from src.services import AsyncPoolService
+from src.services import BasePoolService
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     container = init_container()
-    async_pool_service = container.resolve(AsyncPoolService)
-    await async_pool_service.run()
+    pool_service = container.resolve(BasePoolService)
+    await pool_service.run()
     init_logger()
     yield
-    await async_pool_service.stop()
+    await pool_service.stop()
 
 
 def create_app() -> FastAPI:

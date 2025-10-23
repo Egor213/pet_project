@@ -72,9 +72,9 @@ async def get_all_site_contracts_handler(
 @contract_router.post("/test")
 async def test(test: str, container: punq.Container = Depends(init_container)):
     from src.processing_site.dto_workers import ParceSiteDto
-    from src.services import AsyncPoolService
+    from src.services import BasePoolService
 
-    async_pool_service = container.resolve(AsyncPoolService)
+    async_pool_service = container.resolve(BasePoolService)
     for i in range(100):
         await async_pool_service.add_task(ParceSiteDto(url_site=test + str(i)))
     return {"test": test}
