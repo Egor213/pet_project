@@ -27,7 +27,7 @@ class AsyncPoolService(BasePoolService):
         self.result_handlers: list[tp.Callable] = []
 
     async def _result_dispatcher(self):
-        while self.running:
+        while self.running and self.result_handlers:
             result = await self.get_result()
             tasks = []
             for handler in self.result_handlers:
