@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from pymongo.results import InsertOneResult
+from pymongo.results import InsertOneResult, UpdateResult
 
 
 @dataclass
@@ -14,3 +14,6 @@ class BaseParceSiteRepository(ABC):
 
     @abstractmethod
     async def create_contract(self, contract: dict) -> InsertOneResult: ...
+
+    @abstractmethod
+    async def replace_contract(self, new_contract: dict) -> UpdateResult: ...

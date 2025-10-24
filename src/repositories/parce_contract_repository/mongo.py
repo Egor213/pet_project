@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from motor.motor_asyncio import AsyncIOMotorClient
-from pymongo.results import InsertOneResult
+from pymongo.results import InsertOneResult, UpdateResult
 
 from src.repositories.main import BaseMongoDBRepository
 
@@ -22,3 +22,8 @@ class MongoParceSiteRepository(BaseParceSiteRepository, BaseMongoDBRepository):
 
     async def create_contract(self, contract: dict) -> InsertOneResult:
         return await self._collection.insert_one(contract)
+
+    async def replace_contract(self, new_contract: dict) -> UpdateResult:
+        return await self._collection.replace_one(
+            {"id": new_contract["id"]}, new_contract
+        )

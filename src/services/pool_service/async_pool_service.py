@@ -1,5 +1,6 @@
 import asyncio
 import typing as tp
+from functools import partial
 
 from src.processing_site.asyncpool import AsyncPool
 
@@ -28,13 +29,17 @@ class AsyncPoolService(BasePoolService):
     async def _result_dispatcher(self):
         while self.running:
             result = await self.get_result()
-            asyncio.gather(
-                *(handler(result) for handler in self.result_handlers),
-                return_exceptions=True,
-            )
+            tasks = []
+            for handler in self.result_handlers:
+                res = handler(result)
+                if asyncio.iscoroutine(res):
+                    tasks.append(res)
+            if tasks:
+                await asyncio.gather(*tasks, return_exceptions=True)
 
-    def add_result_handler(self, result_handler):
-        return self.result_handlers.append(result_handler)
+    def add_result_handler(self, result_handler, **kwargs):
+        handler = partial(result_handler, **kwargs)
+        return self.result_handlers.append(handler)
 
     async def run(self):
         await self.pool.run()

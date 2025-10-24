@@ -1,6 +1,14 @@
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 
-class ParceSiteDto(BaseModel):
+@dataclass
+class ParceSiteDto:
     url_site: str
     id: str
+
+
+@dataclass
+class ParceSiteResultDto:
+    id: str
+    result: str | None = None
+    error: str | None = None

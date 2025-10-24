@@ -11,8 +11,9 @@ from src.repositories.parce_contract_repository import (
     BaseParceSiteRepository,
     MongoParceSiteRepository,
 )
-from src.services import AsyncPoolService, BasePoolService, ParceSiteService
 from src.services.http_service import AioHttpService, BaseHttpService
+from src.services.parce_contract_service import ParceSiteService
+from src.services.pool_service import AsyncPoolService, BasePoolService
 
 
 def init_parce_site_repository_mongo():
@@ -34,8 +35,6 @@ def init_async_pool_service(container) -> AsyncPoolService:
         logger=logging.getLogger(__name__),
         http_service=http_service,
     )
-    async_pool.add_result_handler(update_parce_site_contract)
-    # TODO: Можно метрики собирать!
     return async_pool
 
 
@@ -66,13 +65,13 @@ def init_container():
         scope=punq.Scope.singleton,
     )
     container.register(
-        BasePoolService,
-        factory=lambda: init_async_pool_service(container),
+        ParceSiteService,
+        factory=lambda: init_parce_site_service_mongo(container),
         scope=punq.Scope.singleton,
     )
     container.register(
-        ParceSiteService,
-        factory=lambda: init_parce_site_service_mongo(container),
+        BasePoolService,
+        factory=lambda: init_async_pool_service(container),
         scope=punq.Scope.singleton,
     )
 

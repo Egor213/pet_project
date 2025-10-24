@@ -28,7 +28,7 @@ contract_router = routing.APIRouter(
 )
 @exception_handler
 async def create_site_contract_handler(
-    url_site: HttpUrl = Query(..., example="https://example.com"),
+    url_site: HttpUrl = Query(..., example="https://ru.wikipedia.org/wiki/Слоновые"),
     container: punq.Container = Depends(init_container),
 ) -> CreateContractSchema:
     service = container.resolve(ParceSiteService)
