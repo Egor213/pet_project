@@ -4,8 +4,8 @@ from pydantic import HttpUrl
 
 from src.api.schemas import ErrorSchema
 from src.app.init import init_container
-from src.services.parce_contract_service import ParceSiteService
 from src.services.grpc_service import BaseGrpcService
+from src.services.parce_contract_service import ParceSiteService
 from src.utils.decorators import exception_handler
 
 from .schemas import ContractSchema, CreateContractSchema

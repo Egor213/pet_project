@@ -11,10 +11,10 @@ from src.repositories.parce_contract_repository import (
     BaseParceSiteRepository,
     MongoParceSiteRepository,
 )
+from src.services.grpc_service import BaseGrpcService, LogGrpcService
 from src.services.http_service import AioHttpService, BaseHttpService
 from src.services.parce_contract_service import ParceSiteService
 from src.services.pool_service import AsyncPoolService, BasePoolService
-from src.services.grpc_service import BaseGrpcService, LogGrpcService
 
 
 def init_parce_site_repository_mongo():

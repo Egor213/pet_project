@@ -6,10 +6,10 @@ from fastapi import FastAPI
 from src.api.v1 import v1_router
 from src.app.init import init_container
 from src.app.logger import init_logger
+from src.services.grpc_service import BaseGrpcService
 from src.services.http_service import BaseHttpService
 from src.services.parce_contract_service import ParceSiteService
 from src.services.pool_service import BasePoolService
-from src.services.grpc_service import BaseGrpcService
 
 
 @asynccontextmanager

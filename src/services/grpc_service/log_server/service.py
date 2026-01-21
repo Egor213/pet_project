@@ -1,10 +1,11 @@
-import grpc.aio
 from datetime import datetime
 from typing import Any, Optional
+
+import grpc.aio
 from google.protobuf.timestamp_pb2 import Timestamp
 
-from src.api.grpc.v1 import log_service_pb2_grpc as stub_module
 from src.api.grpc.v1 import log_service_pb2 as pb2
+from src.api.grpc.v1 import log_service_pb2_grpc as stub_module
 from src.services.grpc_service.base import BaseGrpcService
 
 

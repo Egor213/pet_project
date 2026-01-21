@@ -1,10 +1,11 @@
 # base.py
-import grpc.aio
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
 from datetime import datetime
-from google.protobuf.timestamp_pb2 import Timestamp
 from typing import Any
+
+import grpc.aio
+from google.protobuf.timestamp_pb2 import Timestamp
 
 
 class BaseGrpcService(ABC):
