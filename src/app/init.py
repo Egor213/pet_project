@@ -14,6 +14,7 @@ from src.repositories.parce_contract_repository import (
 from src.services.http_service import AioHttpService, BaseHttpService
 from src.services.parce_contract_service import ParceSiteService
 from src.services.pool_service import AsyncPoolService, BasePoolService
+from src.services.grpc_service import BaseGrpcService, LogGrpcService
 
 
 def init_parce_site_repository_mongo():
@@ -72,6 +73,14 @@ def init_container():
     container.register(
         BasePoolService,
         factory=lambda: init_async_pool_service(container),
+        scope=punq.Scope.singleton,
+    )
+
+    container.register(
+        BaseGrpcService,
+        instance=LogGrpcService(
+            port=3000,
+        ),
         scope=punq.Scope.singleton,
     )
 

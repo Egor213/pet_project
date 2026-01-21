@@ -12,6 +12,7 @@ def test_validate_uuid_ok():
 
 def test_validate_uuid_fail():
     import pytest
+
     with pytest.raises(ValidationError):
         validate_uuid("invalid-uuid")
 
@@ -22,5 +23,6 @@ def test_validate_found_entity_ok():
 
 def test_validate_found_entity_fail():
     import pytest
+
     with pytest.raises(NotFoundContract):
         validate_found_entity(None)

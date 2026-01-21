@@ -5,6 +5,7 @@ from pydantic import HttpUrl
 from src.api.schemas import ErrorSchema
 from src.app.init import init_container
 from src.services.parce_contract_service import ParceSiteService
+from src.services.grpc_service import BaseGrpcService
 from src.utils.decorators import exception_handler
 
 from .schemas import ContractSchema, CreateContractSchema
@@ -71,10 +72,16 @@ async def get_all_site_contracts_handler(
 
 @contract_router.post("/test")
 async def test(test: str, container: punq.Container = Depends(init_container)):
-    from src.processing_site.dto_workers import ParceSiteDto
-    from src.services import BasePoolService
+    # from src.processing_site.dto_workers import ParceSiteDto
+    # from src.services import BasePoolService
 
-    async_pool_service = container.resolve(BasePoolService)
-    for i in range(100):
-        await async_pool_service.add_task(ParceSiteDto(url_site=test + str(i)))
-    return {"test": test}
+    # async_pool_service = container.resolve(BasePoolService)
+    # for i in range(100):
+    #     await async_pool_service.add_task(ParceSiteDto(url_site=test + str(i)))
+    # log_server = container.resolve(BaseGrpcService)
+    # result = await log_server.send_log(
+    #     service="auth-service",
+    #     level="INFO",
+    #     message="User logged in successfully"
+    # )
+    return {"test": "TEST"}

@@ -7,7 +7,6 @@ from src.services.pool_service.async_pool_service import AsyncPoolService
 from src.services.parce_contract_service.parce_site_service import ParceSiteService
 
 
-
 @pytest.fixture
 async def http_service():
     service = AioHttpService()

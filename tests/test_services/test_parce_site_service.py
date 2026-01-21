@@ -18,8 +18,13 @@ async def test_finalize_contract(parce_site_service, mocker):
     # мок get_contract_by_id
     contract = ParceSiteContract.create_contract("https://finalize.com")
     mocker.patch.object(parce_site_service, "get_contract_by_id", return_value=contract)
-    mocker.patch.object(parce_site_service.contract_repository, "replace_contract", return_value=None)
+    mocker.patch.object(
+        parce_site_service.contract_repository, "replace_contract", return_value=None
+    )
 
     dto = ParceSiteResultDto(id=contract.id, result="ok", error=None)
     await parce_site_service.finalize_contract(dto)
-    assert contract.status.name.lower() in ["success", "in_progress"] or contract.result is None
+    assert (
+        contract.status.name.lower() in ["success", "in_progress"]
+        or contract.result is None
+    )

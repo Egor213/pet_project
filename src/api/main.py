@@ -6,10 +6,10 @@ from fastapi import FastAPI
 from src.api.v1 import v1_router
 from src.app.init import init_container
 from src.app.logger import init_logger
-from src.processing_site.result_handlers import update_parce_site_contract
 from src.services.http_service import BaseHttpService
 from src.services.parce_contract_service import ParceSiteService
 from src.services.pool_service import BasePoolService
+from src.services.grpc_service import BaseGrpcService
 
 
 @asynccontextmanager
@@ -18,6 +18,9 @@ async def lifespan(app: FastAPI):
 
     http_service = container.resolve(BaseHttpService)
     http_service.start()
+
+    grpc_service = container.resolve(BaseGrpcService)
+    await grpc_service.connect()
 
     pool_service = container.resolve(BasePoolService)
     await pool_service.run()
@@ -29,6 +32,7 @@ async def lifespan(app: FastAPI):
     init_logger()
     yield
 
+    await grpc_service.close()
     await http_service.close()
     await pool_service.stop()
 

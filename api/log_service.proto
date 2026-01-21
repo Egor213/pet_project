@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package log;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package = "/loggrpc_gen;loggrpc";
+
+service LogService {
+  rpc SendLog(SendLogRequest) returns (SendLogResponse) {
+    option (google.api.http) = {
+      post: "/v1/logs"
+      body: "*"
+    };
+  }
+  rpc GetLogs(GetLogsRequest) returns (GetLogsResponse) {
+    option (google.api.http) = {
+      get: "/v1/logs"
+    };
+  }
+  rpc GetStats(GetStatsRequest) returns (GetStatsResponse) {
+    option (google.api.http) = {
+      get: "/v1/logs/stats"
+    };
+  }
+}
+
+enum LogLevel {
+  LOG_LEVEL_UNSPECIFIED = 0;
+  INFO = 1;
+  WARN = 2;
+  ERROR = 3;
+}
+
+enum SendStatus {
+  STATUS_OK = 0;
+  STATUS_FAILED = 1;
+}
+
+message SendLogRequest {
+  string service = 1;
+  LogLevel level = 2;
+  string message = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message SendLogResponse {
+  string log_id = 1;
+  SendStatus status = 2;
+}
+
+message GetLogsRequest {
+  string service = 1;
+  LogLevel level = 2;
+  google.protobuf.Timestamp from = 3;
+  google.protobuf.Timestamp to = 4;
+  int32 limit = 5;
+  string message = 6;
+}
+
+message GetLogsResponse {
+  repeated SendLogRequest logs = 1;
+}
+
+
+message GetStatsRequest {
+  string service = 1;
+  google.protobuf.Timestamp from = 2;
+  google.protobuf.Timestamp to = 3;
+}
+
+message LogLevelCount {
+  LogLevel level = 1;
+  int32 count = 2;
+}
+
+message GetStatsResponse {
+  int32 total_logs = 1;
+  repeated LogLevelCount logs_by_level = 3;
+}

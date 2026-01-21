@@ -6,9 +6,6 @@ from src.processing_site.asyncpool import AsyncPool
 
 from .base_pool_service import BasePoolService
 
-# Мне не нравится, что я судя привязываю фоновый обработчик, но это пет-проект, так что ладно)
-# Наверное, я бы хотел видеть что-то типо мапы основной обработчик + обработчик результата
-
 
 class AsyncPoolService(BasePoolService):
     def __init__(
